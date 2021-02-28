@@ -1,17 +1,72 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define DEBUG 1
 #define MAX 1000
-
-class stack
-{
+ 
+class _Stack {
     int top;
-
-    public:
-
+ 
+public:
+    int a[MAX]; // Maximum size of _Stack
+ 
+    _Stack() { top = -1; }
+    bool push(int x);
+    int pop();
+    int peek();
+    bool isEmpty();
+    void print();
+};
+ 
+bool _Stack::push(int x)
+{
+    if (top >= (MAX - 1)) {
+        if (DEBUG)cout << "Stack Overflow\n";
+        return false;
+    }
+    else {
+        a[++top] = x;
+        if (DEBUG)cout << x << " pushed into Stack\n";
+        return true;
+    }
+}
+ 
+int _Stack::pop()
+{
+    if (top < 0) {
+        if (DEBUG)cout << "Stack Underflow\n";
+        return 0;
+    }
+    else {
+        int x = a[top--];
+        return x;
+    }
+}
+int _Stack::peek()
+{
+    if (top < 0) {
+        if (DEBUG)cout << "Stack is Empty\n";
+        return 0;
+    }
+    else {
+        int x = a[top];
+        return x;
+    }
+}
+ 
+bool _Stack::isEmpty()
+{
+    return (top < 0);
 }
 
-int DEBUG = 1;
+void _Stack::print()
+{
+    int n = top + 1;
+    
+    cout << "top-> ";
+    for(int i = 0; i < n; i++) cout << a[top - i] <<" ";
+    cout << "<-down \n";
+}
 
 int solve()
 {
@@ -23,40 +78,38 @@ int solve()
     cin >> N >> K >> P;
     if(DEBUG) printf("%d %d %d\n", N, K, P);
 
-    stack <int> st[];
-    int* A = new int[N * K];
+    int* auxS = new int[N];
+    _Stack* S = new _Stack[K];
 
-    for(int m = 0; m < N; m++)
+    for(int s = 0; s < N; s++)
     {
-        for(int n = 0; n < K; n++) cin >> A[m*N + n];
-
-        if(DEBUG)
+        int aux;
+        
+        for(int t = 0; t < K; t++)
         {
-            cout << "P:";
-            for(int n = 0; n < K; n++) cout << A[m*N + n] << ' ';
-            cout << '\n';
-
+            cin >> auxS[t];
+        }
+        
+        for(int t = 0; t < K; t++)
+        {
+            S[s].push(auxS[K-t -1]);
         }
     }
 
-    /*int a[16];
-    
-    for(int i=0; i<n; ++i) cin >> a[i];
+    if(DEBUG)
+    {
+        S[0].print();
+        S[1].print();
+    }
 
-    sort(a, a + n);
+    for(int s = 0; s < K; s++)
+    {
+        if(S[0].peek() < S[1].peek() ) ret += S[1].pop();
+        else ret += S[0].pop();
 
-    int i = 0;
-    
+        if(DEBUG) cout << "Ret:" << ret << "\n";
+    }
 
-    	for(int i=0; i<n; ++i) 
-        {
-		    if(b>=a[i])
-            {
-			    b-=a[i];
-			    ++ret;
-		    }
-        }
-    */
     return ret; 
 }
 
