@@ -8,7 +8,7 @@ class _Stack {
     int top;
  
 public:
-    int a[MAX]; // Maximum size of _Stack
+    int a[MAX]; // Maximum size of Stack
  
     _Stack() { top = -1; }
     bool push(int x);
@@ -16,6 +16,7 @@ public:
     int peek();
     bool isEmpty();
     void print();
+    int sum(int n);
 };
  
 bool _Stack::push(int x)
@@ -68,6 +69,23 @@ void _Stack::print()
     cout << "<-down \n";
 }
 
+int _Stack::sum(int n)
+{
+    int ret = 0;
+
+    if(n == -1) 
+    {
+       int max = top + 1;
+       for(int i = 0; i < max; i++) ret += a[i];
+    }
+    else
+    {
+        for(int i = 0; i < n; i++) ret += a[top - i];
+    }
+    
+    return ret;
+}
+
 int solve()
 {
     
@@ -102,14 +120,19 @@ int solve()
         S[1].print();
     }
 
+    int aux;
+
+    K+=1;
     for(int s = 0; s < K; s++)
     {
-        if(S[0].peek() < S[1].peek() ) ret += S[1].pop();
-        else ret += S[0].pop();
+        aux = S[0].sum(s) + S[1].sum(K-s);
 
-        if(DEBUG) cout << "Ret:" << ret << "\n";
+        if(aux > ret) ret = aux;
+
+        if(DEBUG) cout << "aux:" << aux << ";S0: "<< s << "\n";
     }
 
+    if(DEBUG) cout << "Ret:" << "\n";
     return ret; 
 }
 
